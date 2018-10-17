@@ -1,2 +1,2 @@
 # flow-finder
-A little program that solves Flow Free levels.
+Assignment 2 for CSCI 446, Artificial Intelligence. Treats Flow levels as a constraint satisfaction problem
