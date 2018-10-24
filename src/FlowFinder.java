@@ -12,6 +12,7 @@ public class FlowFinder
 		File file;
 		ArrayList<String> fileContents = new ArrayList<>();
 		Scanner scanThatFile;
+		Gameboard startingBoard= null;
 		
 		//let's find a file to load!
 		if (args.length < 1)
@@ -41,6 +42,15 @@ public class FlowFinder
 			exit(1);
 		}
 		
-		Gameboard startingBoard = new Gameboard(fileContents);
+		try
+		{
+			//making the board will validate that every color in the input file is used exactly twice
+			startingBoard = new Gameboard(fileContents);
+		}
+		catch (Exception badInput)
+		{
+			System.out.println(badInput);
+			exit(1);
+		}
 	}
 }
