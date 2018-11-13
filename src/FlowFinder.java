@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Stack;
 
 import static java.lang.System.exit;
 
@@ -77,15 +78,35 @@ public class FlowFinder
 		return true;
 	}
 	
-	public Gameboard stupidSearch (Gameboard startingBoard)
+	public Gameboard stupidSearch (Gameboard state)
 	{
 		//TODO dumb backtracking search with no heuristics
-		return startingBoard;
+		Stack<Tile> frontier = new Stack<>();
+		ArrayList<Tile> closed = new ArrayList<>();
+		
+		for (int a = 0; a < state.getHeight(); a++)
+		{
+			for (int b = 0; b < state.getWidth(); b++)
+			{
+				if (state.board[a][b].isOccupied())		//add each tile adjacent to a source to the frontier
+				{	//TODO also must be unoccupied; not on the frontier
+					if (a+1 < state.getHeight())		//but only if it isn't off the edge of the board!
+						frontier.add(state.board[a+1][b]);
+					if (a-1 >= 0)
+						frontier.add(state.board[a-1][b]);
+					if (b+1 < state.getWidth())
+						frontier.add(state.board[a][b+1]);
+					if (b-1 >= 0)
+						frontier.add(state.board[a][b-1]);
+				}
+			}
+		}
+		return state;
 	}
 	
-	public Gameboard cleverSearch (Gameboard startingBoard)
+	public Gameboard cleverSearch (Gameboard state)
 	{
 		//TODO smart search that uses forward checking, and maybe some other stuff to prune off bad branches
-		return startingBoard;
+		return state;
 	}
 }
