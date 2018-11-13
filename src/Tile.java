@@ -1,17 +1,30 @@
 public class Tile
 {
-	boolean endSpace, occupied;
-	char color;
+	private boolean source;
+	private char color;
 	
 	public Tile()
 	{
-		endSpace = false;
-		occupied = false;
+		color = '_';
+		source = false;
 	}
-	public Tile (char color)	//a new tile with a color is always an end space and always occupied
+	public Tile (char color)	//a new tile with a color is always a source space
 	{
 		this.color = color;
-		endSpace = true;
-		occupied = true;
+		source = true;
+	}
+	
+	public boolean isOccupied ()	//true if the color isn't blank.
+	{
+		return color != '_';
+	}
+	
+	public boolean isSource ()
+	{
+		return source;
+	}
+	public char getColor ()
+	{
+		return color;
 	}
 }

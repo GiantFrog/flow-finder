@@ -23,9 +23,7 @@ public class FlowFinder
 			in.close();
 		}
 		else
-		{
 			file = new File(args[0]);
-		}
 		
 		//now try to actually load it
 		try
@@ -52,5 +50,42 @@ public class FlowFinder
 			System.out.println(badInput);
 			exit(1);
 		}
+		System.out.println("Gameboard loaded!");
+	}
+	
+	public boolean isSolved (Gameboard solution)
+	{
+		Tile tile;
+		for (int a = 0; a < solution.getHeight(); a++)
+		{
+			for (int b = 0; b < solution.getWidth(); b++)
+			{
+				tile = solution.board[a][b];
+				
+				if (!tile.isOccupied())
+					return false;	//every tile must be occupied
+				if (tile.isSource())
+				{
+					//TODO make sure one and only one adjacent tile matches the color
+				}
+				else
+				{
+					//TODO make sure exactly two adjacent tiles match the color
+				}
+			}
+		}
+		return true;
+	}
+	
+	public Gameboard stupidSearch (Gameboard startingBoard)
+	{
+		//TODO dumb backtracking search with no heuristics
+		return startingBoard;
+	}
+	
+	public Gameboard cleverSearch (Gameboard startingBoard)
+	{
+		//TODO smart search that uses forward checking, and maybe some other stuff to prune off bad branches
+		return startingBoard;
 	}
 }
