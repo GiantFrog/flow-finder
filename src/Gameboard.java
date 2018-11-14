@@ -22,7 +22,7 @@ public class Gameboard
 			{
 				char color = line.charAt(b);
 				if (color == '_')	//make an empty space
-					board[a][b] = new Tile();
+					board[a][b] = new Tile(a, b);
 				else				//make a space with the appropriate color
 				{
 					if (fullColors.contains(color))
@@ -31,7 +31,7 @@ public class Gameboard
 						fullColors.add(color);
 					else
 						usedColors.add(color);
-					board[a][b] = new Tile(color);
+					board[a][b] = new Tile(a, b, color);
 				}
 			}
 			a++;
@@ -43,6 +43,30 @@ public class Gameboard
 			if (!fullColors.contains(color))
 				throw new Exception("Evey color needs two spaces!");
 		}
+	}
+	
+	public boolean isSolved()
+	{
+		Tile tile;
+		for (int a = 0; a < height; a++)
+		{
+			for (int b = 0; b < width; b++)
+			{
+				tile = board[a][b];
+				
+				if (!tile.isOccupied())
+					return false;	//every tile must be occupied for a valid solution
+				if (tile.isSource())
+				{
+					//TODO make sure one and only one adjacent tile matches the color
+				}
+				else
+				{
+					//TODO make sure exactly two adjacent tiles match the color
+				}
+			}
+		}
+		return true;
 	}
 	
 	public int getHeight ()

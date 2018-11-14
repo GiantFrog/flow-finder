@@ -54,55 +54,6 @@ public class FlowFinder
 		System.out.println("Gameboard loaded!");
 	}
 	
-	public boolean isSolved (Gameboard solution)
-	{
-		Tile tile;
-		for (int a = 0; a < solution.getHeight(); a++)
-		{
-			for (int b = 0; b < solution.getWidth(); b++)
-			{
-				tile = solution.board[a][b];
-				
-				if (!tile.isOccupied())
-					return false;	//every tile must be occupied
-				if (tile.isSource())
-				{
-					//TODO make sure one and only one adjacent tile matches the color
-				}
-				else
-				{
-					//TODO make sure exactly two adjacent tiles match the color
-				}
-			}
-		}
-		return true;
-	}
-	
-	public Gameboard stupidSearch (Gameboard state)
-	{
-		//TODO dumb backtracking search with no heuristics
-		Stack<Tile> frontier = new Stack<>();
-		ArrayList<Tile> closed = new ArrayList<>();
-		
-		for (int a = 0; a < state.getHeight(); a++)
-		{
-			for (int b = 0; b < state.getWidth(); b++)
-			{
-				if (state.board[a][b].isOccupied())		//add each tile adjacent to a source to the frontier
-				{	//TODO also must be unoccupied; not on the frontier
-					if (a+1 < state.getHeight())		//but only if it isn't off the edge of the board!
-						frontier.add(state.board[a+1][b]);
-					if (a-1 >= 0)
-						frontier.add(state.board[a-1][b]);
-					if (b+1 < state.getWidth())
-						frontier.add(state.board[a][b+1]);
-					if (b-1 >= 0)
-						frontier.add(state.board[a][b-1]);
-				}
-			}
-		}
-		return state;
-	}
 	
 	public Gameboard cleverSearch (Gameboard state)
 	{
