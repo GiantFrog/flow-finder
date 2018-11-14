@@ -1,61 +1,68 @@
-import java.util.ArrayList;
-import java.util.Stack;
-
 public class StupidSearch
 {
-	private ArrayList<Tile> closed;
-	private Stack<Tile> frontier;
-	private int attemptedSolutions, endingDepth;
+	private int attemptedSolutions, assignmentsMade;
 	private Gameboard initialState;
 	
 	public StupidSearch (Gameboard startingBoard)
 	{
-		closed = new ArrayList<>();
-		frontier = new Stack<>();
-		attemptedSolutions = 0;
 		initialState = startingBoard;
 	}
 	
+	//resets the tracker values and starts the recursion off.
 	public Gameboard solve()
 	{
-		for (int a = 0; a < initialState.getHeight(); a++)
-		{
-			for (int b = 0; b < initialState.getWidth(); b++)
-			{
-				if (initialState.board[a][b].isOccupied())	//add each of the four tiles adjacent to a source to the frontier
-				{											//it cannot be off the edge of the board, occupied, or already on the frontier
-					if (a+1 < initialState.getHeight() && !initialState.board[a+1][b].isOccupied() && !frontier.contains(initialState.board[a+1][b]))
-						frontier.add(initialState.board[a+1][b]);
-					if (a-1 >= 0 && !initialState.board[a-1][b].isOccupied() && !frontier.contains(initialState.board[a-1][b]))
-						frontier.add(initialState.board[a-1][b]);
-					if (b+1 < initialState.getWidth() && !initialState.board[a][b+1].isOccupied() && !frontier.contains(initialState.board[a][b+1]))
-						frontier.add(initialState.board[a][b+1]);
-					if (b-1 >= 0 && !initialState.board[a][b-1].isOccupied() && !frontier.contains(initialState.board[a][b-1]))
-						frontier.add(initialState.board[a][b-1]);
-				}
-			}
-		}
-		return solve(initialState, 0);
+		attemptedSolutions = assignmentsMade = 0;
+		return solve(new Gameboard(initialState), 0, 0);	//make a new gameboard so we don't muck up the one in the main class!
 	}
 	
-	//TODO this is all a terrible way of doing it. Instead, iterate across every open tile, give it a color, and ditch the branch when a conflict arises.
-	private Gameboard solve (Gameboard state, int depth)
+	//iterates over every tile in the board, assigning random colors until it works, skipping the source tiles.
+	private Gameboard solve (Gameboard state, int x, int y)
 	{
-		//TODO pop from the frontier, do the stuff to it
-		while (true)
+		//go down to the next row once we've completed one.
+		//x is not checked to be in bounds when we call solve, so we should start by doing that.
+		if (x >= state.getWidth())
 		{
-			Tile current = frontier.pop();
-			if (current == null)
-				return null;
-			
-			//TODO check each adjacent space
+			x -= state.getWidth();
+			y++;
 		}
-		if (depth >= endingDepth)
+		
+		if (y >= state.getHeight())
 		{
+			//we've completed the list! One last (redundant at this point) check to make sure we have a valid solution.
+			attemptedSolutions += 1;
 			if (state.isSolved())
 				return state;
 			else
 				return null;
 		}
+		
+		//just skip over any source tiles, we can reuse the untouched state.
+		if (state.board[x][y].isSource())
+			return solve(state, x+1, y);
+		else
+		{
+			//for each color used in the board, start a new branch where our tile is set to that color.
+			Gameboard result;
+			for (char color : state.getColors())
+			{
+				assignmentsMade += 1;
+				state.board[x][y].setColor(color);
+				
+				if (state.constraintsViolated())	//see if we have violated our constraints, and ditch the branch if so.
+					return null;
+				
+				//and thus begins the next level of recursion
+				result = solve(new Gameboard(state), x+1, y);
+				
+				if (result != null)		//if we get back a solution, we are done looping!
+					return result;		//if not, well, let's do it again with another color.
+			}
+		}
+		return null;	//if we've finished trying all the colors, this branch is dead. backtracking time.
+	}
+	
+	public int getAttemptedSolutions()
+	{
+		return attemptedSolutions;
 	}
 }

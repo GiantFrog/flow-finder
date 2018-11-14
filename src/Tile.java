@@ -11,12 +11,21 @@ public class Tile
 		color = '_';
 		source = false;
 	}
+	
 	public Tile (int x, int y, char color)	//a new tile with a color is always a source space
 	{
 		this.x = x;
 		this.y = y;
 		this.color = color;
 		source = true;
+	}
+	
+	public Tile (Tile toCopy)
+	{
+		x = toCopy.getX();
+		y = toCopy.getY();
+		color = toCopy.getColor();
+		source = toCopy.isSource();
 	}
 	
 	public boolean isOccupied ()	//true if the color isn't blank.
@@ -39,5 +48,9 @@ public class Tile
 	public int getY ()
 	{
 		return y;
+	}
+	public void setColor (char color)
+	{
+		this.color = color;
 	}
 }
