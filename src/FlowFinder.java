@@ -56,6 +56,15 @@ public class FlowFinder
 		StupidSearch notGreat = new StupidSearch(startingBoard);
 		stupidSolution = notGreat.solve();
 		System.out.println("It took " + notGreat.getAttemptedSolutions() + " tries to find the solution.");
+		
+		for (int a = 0; a < stupidSolution.getHeight(); a++)
+		{
+			for (int b = 0; b < stupidSolution.getWidth(); b++)
+			{
+				System.out.print(stupidSolution.board[a][b].getColor());
+			}
+			System.out.println();
+		}
 	}
 	
 	

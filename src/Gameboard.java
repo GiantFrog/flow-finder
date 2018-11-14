@@ -87,7 +87,7 @@ public class Gameboard
 		{
 			for (int b = 0; b < width; b++)
 			{
-				if (tileViolates(a, b))
+				if (tileViolates(b, a))	//b is width, and a is height
 					return true;
 			}
 		}
@@ -108,7 +108,7 @@ public class Gameboard
 		if (x < 0 || y < 0 || x >= width || y >= height)	//if this is called on a space which is out of bounds, it's fine.
 			return false;
 		
-		Tile tile = board[x][y];
+		Tile tile = board[y][x];
 		
 		//the constraints get pretty ugly. :(
 		//Read the report for a better explanation of what's going on here. It's even color-coded!

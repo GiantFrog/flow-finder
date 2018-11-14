@@ -37,7 +37,7 @@ public class StupidSearch
 		}
 		
 		//just skip over any source tiles, we can reuse the untouched state.
-		if (state.board[x][y].isSource())
+		if (state.board[y][x].isSource())
 			return solve(state, x+1, y);
 		else
 		{
@@ -46,7 +46,7 @@ public class StupidSearch
 			for (char color : state.getColors())
 			{
 				assignmentsMade += 1;
-				state.board[x][y].setColor(color);
+				state.board[y][x].setColor(color);
 				
 				if (state.constraintsViolated())	//see if we have violated our constraints, and ditch the branch if so.
 					return null;
