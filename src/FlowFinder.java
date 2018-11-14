@@ -13,7 +13,7 @@ public class FlowFinder
 		File file;
 		ArrayList<String> fileContents = new ArrayList<>();
 		Scanner scanThatFile;
-		Gameboard startingBoard= null;
+		Gameboard stupidSolution, cleverSolution, startingBoard = null;
 		
 		//let's find a file to load!
 		if (args.length < 1)
@@ -52,6 +52,10 @@ public class FlowFinder
 			exit(1);
 		}
 		System.out.println("Gameboard loaded!");
+		
+		StupidSearch notGreat = new StupidSearch(startingBoard);
+		stupidSolution = notGreat.solve();
+		System.out.println("It took " + notGreat.getAttemptedSolutions() + " tries to find the solution.");
 	}
 	
 	

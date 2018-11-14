@@ -61,6 +61,7 @@ public class Gameboard
 		}
 	}
 	
+	//checks if a board is a valid final solution
 	public boolean isSolved()
 	{
 		Tile tile;
@@ -76,31 +77,51 @@ public class Gameboard
 			}
 		}
 		//since all tiles are occupied, if it violates no constraints, we have a solution!
-		return constraintsViolated();
+		return !constraintsViolated();
 	}
 	
+	//checks the entire board for any tile that violates constraints.
 	public boolean constraintsViolated()
 	{
-		Tile tile;
 		for (int a = 0; a < height; a++)
 		{
 			for (int b = 0; b < width; b++)
 			{
-				tile = board[a][b];
-				
-				//the constraints get pretty ugly. :(
-				//Read the report for a better explanation of what's going on here. It's even color-coded!
-				if (tile.isSource())
-				{
-					//TODO make sure one and only one adjacent tile matches the color
-					//if (tile.getColor() == board[tile.getX()+1][tile.getY()].getColor())
-				}
-				else
-				{
-					//TODO make sure exactly two adjacent tiles match the color
-				}
+				if (tileViolates(a, b))
+					return true;
 			}
 		}
+		//none of the tiles violated any contraints!
+		return false;
+	}
+	
+	//No need to check the whole board when you change one thing!
+	//when called with an x and a y, we will only check the tile and the four adjacent to it.
+	public boolean constraintsViolated (int x, int y)
+	{
+		return tileViolates(x, y) || tileViolates(x+1, y) || tileViolates(x-1, y) || tileViolates(x, y+1) || tileViolates(x, y-1);
+	}
+	
+	//exclusively for use in constraintsViolated
+	private boolean tileViolates(int x, int y)
+	{
+		if (x < 0 || y < 0 || x >= width || y >= height)	//if this is called on a space which is out of bounds, it's fine.
+			return false;
+		
+		Tile tile = board[x][y];
+		
+		//the constraints get pretty ugly. :(
+		//Read the report for a better explanation of what's going on here. It's even color-coded!
+		if (tile.isSource())
+		{
+			//TODO make sure one and only one adjacent tile matches the color
+			//if (tile.getColor() == board[tile.getX()+1][tile.getY()].getColor())
+		}
+		else
+		{
+			//TODO make sure exactly two adjacent tiles match the color
+		}
+		
 		//TODO get rid of this when the function works
 		return false;
 	}
