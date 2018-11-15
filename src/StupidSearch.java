@@ -29,7 +29,7 @@ public class StupidSearch
 		if (y >= state.getHeight())
 		{
 			//we've completed the list! One last (redundant at this point) check to make sure we have a valid solution.
-			attemptedSolutions += 1;
+			attemptedSolutions++;
 			if (state.isSolved())
 				return state;
 			else

@@ -22,7 +22,7 @@ public class Gameboard
 			{
 				char color = line.charAt(b);
 				if (color == '_')	//make an empty space
-					board[a][b] = new Tile(a, b);
+					board[a][b] = new Tile(a, b, fullColors);
 				else				//make a space with the appropriate color
 				{
 					if (fullColors.contains(color))
@@ -105,25 +105,56 @@ public class Gameboard
 	//exclusively for use in constraintsViolated
 	private boolean tileViolates(int x, int y)
 	{
+		if (board[y][x].getColor() == '_')
+			return false;									//blank tiles can never be invalid
 		if (x < 0 || y < 0 || x >= width || y >= height)	//if this is called on a space which is out of bounds, it's fine.
 			return false;
 		
 		Tile tile = board[y][x];
+		//keep us from going out of bounds.
+		//This will make the logic statements for the constraints compare a tile to itself, evaluating to false, effectively skipping to the next ||
+		int xPlus, xMinus, yPlus, yMinus;
+		if (tile.getX() + 1 > width)
+			xPlus = tile.getX();
+		else
+			xPlus = tile.getX() + 1;
+		if (tile.getY() + 1 > height)
+			yPlus = tile.getY();
+		else
+			yPlus = tile.getY() + 1;
+		if (tile.getX() - 1 < 0)
+			xMinus = tile.getX();
+		else
+			xMinus = tile.getX() - 1;
+		if (tile.getY() - 1 < 0)
+			yMinus = tile.getY();
+		else
+			yMinus = tile.getY() - 1;
 		
 		//the constraints get pretty ugly. :(
 		//Read the report for a better explanation of what's going on here. It's even color-coded!
 		if (tile.isSource())
 		{
-			//TODO make sure one and only one adjacent tile matches the color
-			//if (tile.getColor() == board[tile.getX()+1][tile.getY()].getColor())
+			//make sure at least three adjacent tiles do not match the color
+			return !((tile.getColor() != board[yPlus][tile.getX()].getColor() && tile.getColor() != board[yMinus][tile.getX()].getColor()
+					&& tile.getColor() != board[tile.getY()][xMinus].getColor())
+			|| (tile.getColor() != board[tile.getY()][xPlus].getColor() && tile.getColor() != board[yMinus][tile.getX()].getColor()
+					&& tile.getColor() != board[tile.getY()][xMinus].getColor())
+			|| (tile.getColor() != board[tile.getY()][xPlus].getColor() && tile.getColor() != board[yPlus][tile.getX()].getColor()
+					&& tile.getColor() != board[tile.getY()][xMinus].getColor())
+			|| (tile.getColor() != board[tile.getY()][xPlus].getColor() && tile.getColor() != board[yPlus][tile.getX()].getColor()
+					&& tile.getColor() != board[yMinus][tile.getX()].getColor()));
 		}
 		else
 		{
-			//TODO make sure exactly two adjacent tiles match the color
+			//make sure at least two adjacent tiles do not match the color
+			return !((tile.getColor() != board[yPlus][tile.getX()].getColor() && tile.getColor() != board[yMinus][tile.getX()].getColor())
+					|| (tile.getColor() != board[yPlus][tile.getX()].getColor() && tile.getColor() != board[tile.getY()][xPlus].getColor())
+					|| (tile.getColor() != board[yPlus][tile.getX()].getColor() && tile.getColor() != board[tile.getY()][xMinus].getColor())
+					|| (tile.getColor() != board[yMinus][tile.getX()].getColor() && tile.getColor() != board[tile.getY()][xPlus].getColor())
+					|| (tile.getColor() != board[yMinus][tile.getX()].getColor() && tile.getColor() != board[tile.getY()][xMinus].getColor())
+					|| (tile.getColor() != board[tile.getY()][xPlus].getColor() && tile.getColor() != board[tile.getY()][xMinus].getColor()));
 		}
-		
-		//TODO get rid of this when the function works
-		return false;
 	}
 	
 	public int getHeight ()
