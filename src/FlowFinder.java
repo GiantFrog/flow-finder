@@ -68,11 +68,4 @@ public class FlowFinder
 			System.out.println();
 		}
 	}
-	
-	
-	public Gameboard cleverSearch (Gameboard state)
-	{
-		//TODO smart search that uses forward checking, and maybe some other stuff to prune off bad branches
-		return state;
-	}
 }
