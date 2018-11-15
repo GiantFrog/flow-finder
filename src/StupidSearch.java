@@ -1,6 +1,6 @@
 public class StupidSearch
 {
-	private int attemptedSolutions, assignmentsMade;
+	private int attemptedSolutions, assignmentsMade, deadEnds;
 	private Gameboard initialState;
 	
 	public StupidSearch (Gameboard startingBoard)
@@ -11,7 +11,7 @@ public class StupidSearch
 	//resets the tracker values and starts the recursion off.
 	public Gameboard solve()
 	{
-		attemptedSolutions = assignmentsMade = 0;
+		attemptedSolutions = assignmentsMade = deadEnds = 0;
 		return solve(new Gameboard(initialState), 0, 0);	//make a new gameboard so we don't muck up the one in the main class!
 	}
 	
@@ -33,7 +33,10 @@ public class StupidSearch
 			if (state.isSolved())
 				return state;
 			else
+			{
+				deadEnds++;
 				return null;
+			}
 		}
 		
 		//just skip over any source tiles, we can reuse the untouched state.
@@ -48,14 +51,17 @@ public class StupidSearch
 				assignmentsMade += 1;
 				state.board[y][x].setColor(color);
 				
-				if (state.constraintsViolated())	//see if we have violated our constraints, and ditch the branch if so.
-					return null;
+				if (state.constraintsViolated(x, y))	//see if we have violated our constraints and ditch the branch if so.
+					deadEnds++;
 				
-				//and thus begins the next level of recursion
-				result = solve(new Gameboard(state), x+1, y);
-				
-				if (result != null)		//if we get back a solution, we are done looping!
-					return result;		//if not, well, let's do it again with another color.
+				else
+				{
+					//and thus begins the next level of recursion
+					result = solve(new Gameboard(state), x + 1, y);
+					
+					if (result != null)       //if we get back a solution, we are done looping!
+						return result;        //if not, well, let's do it again with another color.
+				}
 			}
 		}
 		return null;	//if we've finished trying all the colors, this branch is dead. backtracking time.
@@ -64,5 +70,13 @@ public class StupidSearch
 	public int getAttemptedSolutions()
 	{
 		return attemptedSolutions;
+	}
+	public int getAssignmentsMade()
+	{
+		return assignmentsMade;
+	}
+	public int getDeadEnds()
+	{
+		return deadEnds;
 	}
 }
