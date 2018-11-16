@@ -4,16 +4,16 @@ public class Tile
 {
 	private boolean source;
 	private char color;
-	private int x, y, adjacentTiles;
+	private int x, y, emptyAdjacentTiles;
 	private ArrayList<Character> possibleColors;
 	
-	public Tile (int x, int y, ArrayList<Character> usedColors)
+	public Tile (int x, int y)
 	{
 		this.x = x;
 		this.y = y;
 		color = '_';
 		source = false;
-		possibleColors = new ArrayList<>(usedColors);
+		possibleColors = new ArrayList<>();
 	}
 	
 	public Tile (int x, int y, char color)	//a new tile with a color is always a source space
@@ -31,7 +31,9 @@ public class Tile
 		y = toCopy.getY();
 		color = toCopy.getColor();
 		source = toCopy.isSource();
-		possibleColors = new ArrayList<>(toCopy.getPossibleColors());
+		possibleColors = new ArrayList<>();
+		possibleColors.addAll(toCopy.getPossibleColors());
+		this.emptyAdjacentTiles = toCopy.getEmptyAdjacentTiles();
 	}
 	
 	public boolean isOccupied ()	//true if the color isn't blank.
@@ -55,9 +57,17 @@ public class Tile
 	{
 		return y;
 	}
-	public int getAdjacentTiles()
+	public int getEmptyAdjacentTiles()
 	{
-		return adjacentTiles;
+		return emptyAdjacentTiles;
+	}
+	public void resetEmptyAdjacentTiles()
+	{
+		emptyAdjacentTiles = 0;
+	}
+	public void addEmptyAdjacentTile()
+	{
+		emptyAdjacentTiles++;
 	}
 	public void setColor (char color)
 	{
@@ -66,5 +76,13 @@ public class Tile
 	public ArrayList<Character> getPossibleColors()
 	{
 		return possibleColors;
+	}
+	public void setPossibleColors (ArrayList<Character> usedColors)
+	{
+		possibleColors.addAll(usedColors);
+	}
+	public void removePossibleColor (char color)
+	{
+		possibleColors.remove(color);
 	}
 }
