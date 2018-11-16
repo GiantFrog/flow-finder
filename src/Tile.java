@@ -7,13 +7,13 @@ public class Tile
 	private int x, y, adjacentTiles;
 	private ArrayList<Character> possibleColors;
 	
-	public Tile (int x, int y, ArrayList<Character> usedCharacters)
+	public Tile (int x, int y, ArrayList<Character> usedColors)
 	{
 		this.x = x;
 		this.y = y;
 		color = '_';
 		source = false;
-		possibleColors = new ArrayList<>(usedCharacters);
+		possibleColors = new ArrayList<>(usedColors);
 	}
 	
 	public Tile (int x, int y, char color)	//a new tile with a color is always a source space

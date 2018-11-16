@@ -20,7 +20,7 @@ public class CleverSearch
 	private Gameboard solve (Gameboard state)
 	{
 		//first, we need to choose which tile to assign a color!
-		ArrayList<Tile> mostConstrainted = new ArrayList<>();
+		ArrayList<Tile> mostConstrained = new ArrayList<>();
 		int valuesLeft = 2000;
 		
 		//get a list of all the most constrained tiles
@@ -31,8 +31,8 @@ public class CleverSearch
 				if (!tile.isOccupied() && tile.getPossibleColors().size() < valuesLeft)
 				{
 					valuesLeft = tile.getPossibleColors().size();
-					mostConstrainted.clear();
-					mostConstrainted.add(tile);
+					mostConstrained.clear();
+					mostConstrained.add(tile);
 				}
 			}
 		}
@@ -51,13 +51,13 @@ public class CleverSearch
 		
 		//we'll need to run a tiebreaker if we come up with multiple tiles
 		Tile current;
-		if (mostConstrainted.size() > 1)
+		if (mostConstrained.size() > 1)
 		{
 			//TODO pick a tile at random from the ones bordering the most empty tiles
-			current = mostConstrainted.get(1);
+			current = mostConstrained.get(1);
 		}
 		else
-			current = mostConstrainted.get(0);
+			current = mostConstrained.get(0);
 		
 		Gameboard result;
 		for (char color : current.getPossibleColors())
