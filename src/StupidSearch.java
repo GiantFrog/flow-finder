@@ -51,10 +51,7 @@ public class StupidSearch
 				assignmentsMade += 1;
 				state.board[y][x].setColor(color);
 				
-				if (state.constraintsViolated(x, y))	//see if we have violated our constraints and ditch the branch if so.
-					deadEnds++;
-				
-				else
+				if (state.doesNotViolate(x, y))	//see if we have violated our constraints and ditch the branch if so.
 				{
 					//and thus begins the next level of recursion
 					result = solve(new Gameboard(state), x + 1, y);
@@ -62,6 +59,9 @@ public class StupidSearch
 					if (result != null)       //if we get back a solution, we are done looping!
 						return result;        //if not, well, let's do it again with another color.
 				}
+				
+				else
+					deadEnds++;
 			}
 		}
 		return null;	//if we've finished trying all the colors, this branch is dead. backtracking time.

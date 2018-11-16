@@ -65,15 +65,15 @@ public class CleverSearch
 			assignmentsMade += 1;
 			current.setColor(color);
 			
-			if (state.constraintsViolated(current.getX(), current.getY()))
-				deadEnds++;
-			
-			else
+			if (state.doesNotViolate(current.getX(), current.getY()))
 			{
 				result = solve(new Gameboard(state));
 				if (result != null)
 					return result;
 			}
+			
+			else
+				deadEnds++;
 		}
 		return null;
 	}
